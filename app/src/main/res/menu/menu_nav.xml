@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_home"
+            android:title="Home"
+            android:icon="@drawable/ic_home"/>
+        <item
+            android:id="@+id/nav_home2"
+            android:title="Top Trends"
+            android:icon="@drawable/ic_home3"/>
+
+        <item
+            android:id="@+id/nav_home3"
+            android:title="Gaming Trends"
+            android:icon="@drawable/ic_home3"/>
+
+    </group>
+
+    <item android:title="Hot Trends">
+
+        <menu>
+            <group android:checkableBehavior="single">
+                <!--<item android:title="GoNintendo Trends"
+                    android:id="@+id/cointelegraph"
+                    android:icon="@drawable/ic_cointelegraph"/>
+                <item android:title="BlizzardWatch Trends"
+                    android:id="@+id/coindesk"
+                    android:icon="@drawable/ic_coindesk"/>-->
+                <item android:title="A16Z.com Trends"
+                    android:id="@+id/newsBTC"
+                    android:icon="@drawable/ic_newsbtc"/>
+                <item android:title="EuroGamer.net Trends"
+                    android:id="@+id/bitcoinist"
+                    android:icon="@drawable/ic_bitcoinist"/>
+
+            </group>
+        </menu>
+
+    </item>
+
+    <item android:title="Communicate">
+
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_rate"
+                    android:title="Rate us"
+                    android:icon="@drawable/ic_rate"/>
+            </group>
+        </menu>
+
+    </item>
+
+</menu>
