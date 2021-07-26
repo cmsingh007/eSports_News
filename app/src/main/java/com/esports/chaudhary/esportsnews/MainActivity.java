@@ -621,7 +621,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 break;
             case R.id.nav_rate:
                 startActivity(new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("https://play.google.com/store/apps/details?id=com.mohitchaudhary.cryptonewspaper")));
+                        Uri.parse("https://play.google.com/store/apps/details?id=com.esports.chaudhary.esportsnews")));
                 break;
         }
 
