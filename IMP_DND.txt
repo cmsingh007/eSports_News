@@ -1,0 +1,245 @@
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Basic Idea/Terminlogies
+Introduction
+Oracle Weblogic Server + Issues
+Oracle HTTP Server(OHS) + Issues
+Example of Application and required architecture that you have worked on
+Apache + Tomcat + Issues
+SSO Part - OAM/OIM/LDAP
+SSL Certificates + Issues
+Learning Cloud, Shell Scripting and Container Services
+Moc Interview
+Questions Set
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+Basic Idea/Terminlogies
++++++++++++++++++++++++++++++++++
+
+Different Teams in Organization - Middleware Teams (Usually we are part of it), Database Team (DBA), Network Team, Windows Team, Linux/Unix Team, Cloud Team, IAM Team (Identity & Access Management Team) - OAM,OIM and OID.
+
+Oracle Fusion Middleware -> Oracle Suite of products for the Managing the middleware infrastructure in organzaitions. Weblogic,OHS,Oracle Access Mangaer(OAM), Oracle Identity Manager(OIM), Oracle Identity Directory(OID), SOA and OBIEE
+
+
+LoadBalancer_URL (F5 is the Load Balancer technology ) e.g bro.gov.in   -> Round Robin, Least Connection, IP Hashing
+      |
+Web Servers  e.g. OHS, Apache
+      |
+Application Servers e.g. Weblogic, Tomcat
+      |
+Database   e.g. Oracle Database Server
+
+
+
+SSO- Its an Authentication Process that allows users to access multiple applications with one set of login credentials. Example of Gmail and Youtube. There is central services which generally throws the login page 
+
+
+Authentication vs Authorization -> Authentication is basically verifying the true identity of a user or entity like using username and password. Authorization gives those users permission to access a resource.
+
+OAM- OAM basically provides services like SSO, Authentication, Authorization.
+OIM- OIM does the life cycle managemant of an Identity.
+OID- It holds the information like Name, Designation, application specific Roles , passwords. It is Oracle's LDAP Implementation.
+LDAP - Lightweight Directory Access Protocol. It basically stores Name, Designation, application specific Roles , passwords.
+
+
+Types of Servers:
+1. Web Server: Its simple work is to handle all the Http/https traffic or to intercept all the incoming requests and send the request to proper resource (like APP Server). 
+
+2. APP Server: Its simple work is to run the application deployed on it and perform various tasks realted to the application like Transaction processing etc. It is connected to the Database and when required, application will fetch the data or push the data as needed.
+
+3. Database Server: Its contains all the related tables and required data to speicific applications.
+
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Introduction
+++++++++++++++++
+
+Thanks for your time Sir.
+let me introduce myself.
+
+my full name is sanchit chaudhary and I basically belong to Bulandshahr city in West UP and I have my bachelor in CE.
+
+I have over 2.5 years hand on exp. in Administration and Maintenance on Oracle Fusion Middleware servers. I am currently working in IT services of BRO under EDP Section. The technology Stack that I have worked on include- Oracle Weblogic Server, Oracle HTTP Server, SSL Certificates and working knowledge on apache & tomcat. I am also learning Container Services like Docker & Kubernetes.
+
+I have succesfully installed Oracle Weblogic Server 12.2.1.3 and Oracle HTTP Server 12.2.1.3 & have also upgrade the weblogic and OHS infrastructure to 12.2.1.4.
+
+
+Your Day to Day tasks
+=======================
+1. Working on the EAR/WAR/JAR Deployments.
+2. Responsible for troubleshooting & solving of middleware/application Incidents.
+3. Monitoring & Analyzing resources from weblogic console, logs.
+4. communication with application teams for issues and resolution.
+
+
+
+Day to Day known Issues and Resolutions
+=========================================
+1. Deployments Issues (Deployment get in failed state)
+2. Data Source connection was NOT working..
+3. Out of Memory Issuse in logs
+4. High CPU Utlization
+5. Memory Issues on server.
+
+
+
+
+
++++++++++++++++++++++++++++++++++++
+Oracle Weblogic Server + Issues
+++++++++++++++++++++++++++++++++++
+
+
+Deployment:
+==============
+
+Through winscp you can copy the Deployment files on the linux server.
+
+Default Deployment Path: Domain_Home/servers/Admin_Server/upload/
+
+Deployment File Types:
+1. WAR File: Web archive  (Application Code Bundled together) --Install this deployment as application
+2. EAR File: Enterprise application archive (Application Code Bundled together) --Install this deployment as application
+3. JAR File: Java Archive  (libraries) ---Install this deployment as library
+
+Deployment File State:
+NEW: when your MS are down, application state will always be NEW for exiting as well as new deployment.
+PREPARED: a) when you stop the application. b) Its a new application, when MS are running.
+ACTIVE: when you app is Running Fine.
+FAILED: after deployment, it can go to failed state of there is any problem with the code. check in server logs, what is the issue.
+
+
+NEW-> PREPARED (start) -> ACTIVE
+ACTIVE (stop) -> PREPARED
+
+
+How to do the Deployment:
+1. Undeploy the Application (Delete)
+2. Shutdown the MS
+3. Clear the tmp/cache/stage of all MS
+4. Restart all the MS
+5. Deploy the application
+6. Start the application. [Sometimes it automatically came to ACTIVE State.]
+
+
+Undeploy the application:
+Click on Lock & Edit: select the app and click on Delete -> Activate the Changes.
+
+
+Deploy the application:
+From weblogic console: In "change center" -> Click on Lock & Edit -> Go to the Deployments -> Click on Install -> Now you have below 2 Options:
+
+a. Click on Upload Your files -> It will ask us to upload the files from our local, Click on Next -> Choose the Server Path(where app will be deployed on servers), Click on Next ->
+b. Or Choose the files by giving the Server Path, here deployments will be already copied here
+
+-> Choose Install this deployment as application -> select the targets or Managed Servers or Clusters, click on Next -> Finish the deployment -> Activate the Changes
+
+
+
+
+
+Security Realm: 
+==============
+Click on the "Security Ream" > Goto "myrealm" > Goto "Users & Groups" Section to manange
+
+Inside this We Manage required Users & groups, roles & policies respective to the weblogic and required application
+
+Groups: Admin, Deployer, Monitor, Operator Group  [We can also create some kind of manual groups as well]
+
+Users: we can associate different users to the above mentioned groups
+
+Providers: Default Authenticator [It basically deals with the local weblogic authentication page], OID/LDAP Authenticator [It basically deals with OAM authentication page]
+
+Default Security realm is "myrealm"
+
+
+For creating New User in Security Realm:
+Click on the "Security Ream" > Goto "myrealm" > Goto "Users & Groups" Section -> Create a New User -> Type Name, Description and choose provider, and type the password for that user and click ok
+
+To assign the required group:
+Click on the UserName -> Goto "Groups" Section and assign the required group
+
+For Resetting the password and assiging the required group:
+Click on the UserName -> Goto Password Section and type the new password and click ok
+
+
+Extra Points on Security Realm: 
+- Its the security realm that authenticates users and determines which resources they can access.
+- when you create a domain, the username/password credentials you provide are used by the configuration wizard[window launch during installation] to seed the security realm. The Username you provide will be initial administrative user in "myrealm"
+
+
+
+
+
+
+
+
+
+
+
+Change Center
+===============
+
+Lock & Edit Option:
+Release Configuration: If we dont want to proceed with the changes, then we can just click on this.
+Activate Changes: Once I have activated the changes, all changes will be reflected and Lock & Edit will be available again
+
+
+
+
+
+
+Installation & Upgrade
+======================
+
+Installation Mode:
+
+Dev & Prod
+
+
+
+
+Weblogic Services
+==================
+ps -ef | grep Java
+-xms and -xmx
+heap dump and thread dump
+Node URLs, contect roots
+WLST
+
+- On the MS/JVMs, only the Java byte code can execute
+
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Example of Application and required architecture that you have worked on
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Below are the 3 critical apps that we were supporting:
+1. WMS  	-> DEV Environment, SIT Environment, UAT Environment, PROD Environment
+2. BRIMS  	-> DEV Environment, SIT Environment, UAT Environment, PROD Environment
+3. HRMS		-> DEV Environment, SIT Environment, UAT Environment, PROD Environment
+
+First 3 Environment is for testing purpose only
+Prod Environment -> LIVE Environment.
+
+
+
+
+++++++++++++++++++++
+Questions Set
+++++++++++++++++++++
+
+1. If you are CE then why you are in IT or pursing carrer in IT etc???
+2. DR Servers
+3. diffence between 12.2.1.3 and 12.2.1.4 and 14.1.1.0... have you worked on 11g versions?
+
+
