@@ -14,9 +14,6 @@ Questions Set
 
 
 
-
-
-
 Basic Idea/Terminlogies
 +++++++++++++++++++++++++++++++++
 
@@ -628,6 +625,123 @@ Development Mode: (No Change Center i.e. all changes will be effected immediatel
 Production Mode: (Change center i.e. first you have to lock & edit, then only you can do the changes)
 
 
+Clustering in Weblogic:
+=======================
+
+		CLUSTER
+		|      |
+       MS_1   MS_2
+	   
+	
+Primary_Node	       			                    Secondary_Node
+(192.168.1.1)/Hostname                              (192.168.1.2)/Hostname
+   |                                                         |
+Install_Middleware                                     Install_Middleware
+   |                                                          |                                            
+./config.sh                                              ./unpack.sh
+   |
+Create Domain_Home
+   |
+ADMIN_SERVER (192.168.1.1)
+MS_1         (192.168.1.1)
+MS_2         (192.168.1.2)
+MACHINE_1    (192.168.1.1)
+MACHINE_2    (192.168.1.2)
+CLUSTER (create cluster and map above MS_1 and MS_2)
+    |
+./startWeblogic.sh 
+    |
+./pack.sh
+
+
+
+pack on primary node: (pack.sh will create the JAR file and it contains the Domain and Cluster configuration)
+./pack.sh -domain=/home/sanchitchaudhary/Domain_Home -template=/home/sanchitchaudhary/cluster.jar -template_name=remote_managed -managed=true
+
+copy the cluster.jar file to the secondary node.
+
+unpack on secondary node
+./unpack.sh -domain=/home/sanchitchaudhary/Domain_Home -template=/home/sanchitchaudhary/cluster.jar 
+
+
+
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Oracle HTTP Server(OHS) + Issues + Important Files & Locations:
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+OHS is Web Server.
+
+Important File in OHS:
+
+1. mod_wl_ohs.conf
+- This file is used to connect with the APP server like weblogic.
+
+<IfModule weblogic_module>
+	WebLogicHost 192.168.1.1
+	WebLogicPort 7003     (ManagedServer_Port)
+</IfModule>
+
+<IfModule weblogic_module>
+	WebLogicCluster 192.168.1.1:7003,192.168.1.2:7005
+</IfModule>
+
+
+
+2. ssl.conf
+- This file is basically used for SSL functionality on OHS Server.
+
+some key paramters are:
+SSLEngine on  [If it is off then we are NOT using it]
+SSLWallet  /home/sanchitchaudhary/OHS/wallet   [SSL files for the OHS]
+
+
+
+3. httpd.conf
+- This is the file where OHS Listen address is present and we can mention what files to include during the startup of OHS. like include "mod_wl_ohs.conf".
+
+Listen 192.168.1.2:7777
+
+# Include the configuration files needed for mod_weblogic
+include "mod_wl_ohs.conf"
+
+# Include the SSL definitions and Virtual Host container
+include "ssl.conf"
+
+# Include the admin virtual host (Proxy Virtual Host) related configuration 
+include "admin.conf"
+
+
+
+
+
+
+++++++++++++++++++++++++++
+SSL Certificates + Issues:
+++++++++++++++++++++++++++
+
+SSL -> Secure Socket Layer.
+Keystore -> It contains the Private Key files and SSL Certificates. (e.g. of keystores -> trust.pkx and identity.pkx)
+and we can map these keystores on the weblogic console.
+
+SSL is basically used for encryption connection between client and server.
+
+we only have SSL on Weblogic Not on OHS server & Using "keytool" utility we import or delete the SSL Certificate from the Keystore.
+
+ 
+keytool -delete       [It will delete the existing SSL Certificate from Keystore]
+Keytool -importcert   [It will add the new SSL Certificate in Keystore.]
+ 
+
+
+
+openssl pkcs12 -in <Certificate_Name>.pfx -out <Certificate_Name>.pem
+openssl pkcs12 -in <Certificate_Name>.pfx -nocerts -out priv-key1.key -nodes
+keytool -delete -alias workday -keystore trust.pkx -storepass *****@_store
+keytool -importcert -trustcacerts -alias uat_mdoc_crt -file chain1.cer -keystore trust.pkx -storepass ****@_store
+keytool -v -list -alias workday -keystore trust.pkx -storepass *****@_store
+
 
 
 
@@ -660,9 +774,10 @@ Questions Set
 4. stage and non-stage mode in weblogic?
 5. what is CVE?
 6. what is CLASS_PATH?
+7. One-way or Two-way SSL, trust & Identity keystore?
+The main difference between trustStore and keyStore is that trustStore (as name suggest) is used to store certificates from trusted Certificate authorities(CA) which are used to verify certificate presented by Server in SSL Connection, while keyStore is used to store private keys and identity certificates which programs should present to other parties (Server or client) to verify its identity.
 
 
-heap dump and thread dump
 Node URLs, context roots
 WLST
 
