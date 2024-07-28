@@ -1,11 +1,10 @@
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Basic Idea/Terminlogies
 Introduction
-Oracle Weblogic Server + Issues
-Oracle HTTP Server(OHS) + Issues
+Oracle Weblogic Server + Issues + Important Files & Locations:
+Oracle HTTP Server(OHS) + Issues + Important Files & Locations:
 Example of Application and required architecture that you have worked on
 Apache + Tomcat + Issues
-SSO Part - OAM/OIM/LDAP
 SSL Certificates + Issues
 Learning Cloud, Shell Scripting and Container Services
 Moc Interview
@@ -36,7 +35,7 @@ Database   e.g. Oracle Database Server
 
 
 
-SSO- Its an Authentication Process that allows users to access multiple applications with one set of login credentials. Example of Gmail and Youtube. There is central services which generally throws the login page 
+SSO(Single Sign-On)- Its an Authentication Process that allows users to access multiple applications with one set of login credentials. Example of Gmail and Youtube. There is central services which generally throws the login page 
 
 
 Authentication vs Authorization -> Authentication is basically verifying the true identity of a user or entity like using username and password. Authorization gives those users permission to access a resource.
@@ -57,7 +56,8 @@ Types of Servers:
 
 
 
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+++++++++++++++++
 Introduction
 ++++++++++++++++
 
@@ -66,17 +66,19 @@ let me introduce myself.
 
 my full name is sanchit chaudhary and I basically belong to Bulandshahr city in West UP and I have my bachelor in CE.
 
-I have over 2.5 years hand on exp. in Administration and Maintenance on Oracle Fusion Middleware servers. I am currently working in IT services of BRO under EDP Section. The technology Stack that I have worked on include- Oracle Weblogic Server, Oracle HTTP Server, SSL Certificates and working knowledge on apache & tomcat. I am also learning Container Services like Docker & Kubernetes.
+I have over 2.5 years hand on exp. in Administration and Maintenance on Oracle Fusion Middleware servers. I am currently working as Oracle Weblogic Administrator in IT services of BRO under EDP Section. The technology Stack that I have worked on include- Oracle Weblogic Server, Oracle HTTP Server, SSL Certificates and working knowledge on apache & tomcat. I am also learning Container Services like Docker & Kubernetes.
 
 I have succesfully installed Oracle Weblogic Server 12.2.1.3 and Oracle HTTP Server 12.2.1.3 & have also upgrade the weblogic and OHS infrastructure to 12.2.1.4.
+My Day 2 Day Task include-below activities:
 
 
-Your Day to Day tasks
-=======================
-1. Working on the EAR/WAR/JAR Deployments.
-2. Responsible for troubleshooting & solving of middleware/application Incidents.
+Your Day to Day tasks/Weblogic Admin Tasks
+===========================================
+1. Working on the EAR/WAR/JAR Deployments. [PROD Deployments generally happened on weekends to reduce the downtime]
+2. Responsible for troubleshooting & solving of middleware/application realted Incidents (ticket).
 3. Monitoring & Analyzing resources from weblogic console, logs.
-4. communication with application teams for issues and resolution.
+4. communication with respective application teams for issues and resolution.
+5. Patching the Environment.
 
 
 
@@ -84,25 +86,276 @@ Day to Day known Issues and Resolutions
 =========================================
 1. Deployments Issues (Deployment get in failed state)
 2. Data Source connection was NOT working..
-3. Out of Memory Issuse in logs
-4. High CPU Utlization
-5. Memory Issues on server.
+
+3. Out of Memory Issuse in logs (we checked free -gh and find out the free memory on the server is 0. -> For Instant resolution, we restarted the server. and suggested stakeholders to increase Memory on the server. Once the memory in increased, the issue got resolved permanently)
+
+4. High CPU Utlization (we checked top command and find out that CPU is 100% utlized then the process which were consuming high CPU, we took the thread dump of all those processes and shared with the development team for further analyzis. We restarted some of the nodes in a rolling fashion to keep the CPU Utlization under threshold.)
+
+
+recent Issue that you have worked on:
+1. NodeManager Issue.
+
+
+Answer to HR or anyone regarding your position
+===============================================
+
+The Main Reason for my switch is:
+1. Learning is very very limited. As as a youg carrer I want to explore new technologies/domains like Docker and Kubernetes.
+2. And the criticalreason is I will always be posted in High altitude/mountain regions because of which my health is getting affected seriously.
+3. I am working around 12-14 hours on a daily basis even on almost every weekend.
+
+Same tech stack we have in corporate world, so I thought why NOT to switch to corporate as it will save me from 12000ft high-altitude region.
 
 
 
 
 
-+++++++++++++++++++++++++++++++++++
-Oracle Weblogic Server + Issues
-++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Oracle Weblogic Server + Issues + Important Files & Locations:
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+Linux Important Info & Commands:
+=================================
+
+JDK(Java Development Kit)  vs  JRE(Java Runtime Environment)  vs  JVM(Java Virtual Machine)
+
+JDK: JRE + Development/Debugging Tools  -> JAVA_HOME -> directories like bin, jre etc..
+JRE: JVM + Java Package Classes + required lib.
+JVM: Runtime Area -> Actual application code is run.
+
+java -version
+Current Java Version is 1.8.0_411
+export JAVA_HOME=/path/where_jdk_file_is_untared
+export PATH=$JAVA_HOME/bin:$PATH
+
+
+Background Process: Using '&' , you can background process.
+Foreground Process: You can enter values for any input when kind of script is running. 
+
+ps -ef  			-> This will give every running process on Linux System.
+ps -ef | grep Java	-> Only give the Java Process
+
+
+.bash_profile -> It is used to set the Environment variables such as JAVA_HOME & set the default permission for newly created user. [This file will be present in the home location (/home/<user_id>) of user.]
+
+ls -larth -> a- all files. It is used to show all the hidden files.
+
+
+lscpu -- It will give you the CPU details(architecture, MHz).
+top -- It will give you the runtime CPU Utlization.
+
+
+-- To see the Available, Used & Free memory, you can use below 2 commands:
+1. cat /proc/meminfo
+2. free -gh
+              total        used        free      shared  buff/cache   available
+Mem:           62Gi        41Gi       905Mi       142Mi        19Gi        19Gi
+Swap:         2.0Gi       2.0Gi          0B
+
+
+File System command: (It will give you the Mount point details like windows Drive ..c drive, d drive, g drive)
+
+df -h    (df menas disk file)
+Filesystem    Size  Used Avail Use% Mounted on
+devtmpfs       32G     0   32G   0% /dev
+tmpfs          32G     0   32G   0% /dev/shm
+
+Disk Utlizaition command:
+du -sh * 
+3.2G    archive
+
+
+How to check the Listening Ports on the server: -> We can Run the "netstat" command and check for the Listening Port.
+
+netstat -tuanp | grep 7001
+tcp        0      0 172.31.189.13:7001     0.0.0.0:*               LISTEN      1018751/java
+
+
+
+tar -cvf <myfile.tar> required_files  		 : c- create   v-verbose  f-filename.tar
+tar -cvzf  <myfile.tar.gz> required_files 	 : c- create   v-verbose  f-filename.tar  z- zip(gz)
+untar -xvzf <myfile.tar.gz>
+
+
+To kill the process, use below command:
+
+kill -9 <process_id>
+
+
+Softlink:
+=========
+- Its a symbolic link. Acts as a pointer/reference to the file_name.
+- If the original file is deleted then the soft link will not work.
+
+ln -s /home/sanchitchaudhary/Documents/photo refer_photo   : ln means link, -s means soft link
+
+
+Hardlink:
+=========
+- Acts as a copy of the selected file.
+- Deleting the original file does not delete the hard link.
+
+ln /home/sanchitchaudhary/Documents/photo refer_photo
+
+
+
+
+
+
+Weblogic Admin Tools:
+=======================
+1. Oracle Weblogic Console.
+2. WLST (Weblogic Scripting Tool)
+3. Enterprise Manager (EM Tool)  -- We are Not working on EM.
+
+
+ADMIN_SERVER: 
+=============
+- Used to manage domain/services.
+- Any config/change needs to be done through admin server only.
+- one & only admin server per domain.
+- Default Port is 7001
+
+MANAGED_SERVER/JVMs:
+====================
+- Server that hosts the application.
+- where application code is run.
+- 0 to N Managed Server per doman.
+- MSI : managed server can start up even if Admin Server is NOT Running. [For the first time, we require Admin to be running.]
+- Default port -
+
+
+MACHINE:
+========
+- It identifies a physical host on which server is running.
+- Machine is used to associate a weblogic server. [During Initial Installation. and after from the weblogic console]
+
+
+CLUSTERS:
+=========
+- Group of servers running simultaneoulsy and running together to act as a single server.
+- Cluster members can be on same or different hosts/machine.
+- Cluster communication: Unicast, multicast.
+
+
+        CLUSTER
+		|      |
+       MS_1   MS_2
+(192.168.1.1) (192.168.1.2)
+
+Rolling Restart: One by one-> First Stop MS_1 and start MS_1,
+						   and then Stop MS_2 and start MS_2
+						   
+						   
+
+GARBAGE_COLLECTTION:
+=====================
+-> The application Code generates Objects in the heap area and the unutlized objects will increase the heap_meory, in order to clean these unutlized objects, we perform garbage collection. (Click on that MS Server -> Goto the Monitoring Tab -> Go to the Performance section and perform Garbage collection, it will free up the required heap memory and sometimes memory gets full and leads the MS into warning state)		   
+						   
+					
+we can configure the below ports during Installation or from weblogic console (by going into the Manager Servers section)					
+LISTEN_PORT (Non-SSL)
+SSL_LISTEN_PORT
+
+
+
+Important Files & Locations:
+=============================
+
+
+           MIDDLEWARE_HOME            (We only Patch Middleware_home only during weblogic patching)
+           |            |
+    DOMAIN_HOME_1     DOMAIN_HOME_2   (You can create multiple domains as well.)
+	(Admin_Server)    (Admin_Server)
+	
+	
+   MIDDLEWARE_HOME_1             MIDDLEWARE_HOME_2 
+   |              |                   |
+ DOMAIN_HOME_A   DOMAIN_HOME_B     DOMAIN_HOME_2   (You can create multiple domains as well.)
+ (Admin_Server)	 (Admin_Server)    (Admin_Server)
+	 
+	
+
+MIDDLEWARE_HOME: (this is your Middleware Home) this is where we install the Oracle Weblogic Server components are installed.
+
+WL_HOME: (Weblogic_Server_Home) : $MIDDLEWARE_HOME/wlserver
+
+$MIDDLEWARE/oracle_common/common/bin/pack.sh
+$MIDDLEWARE/oracle_common/common/bin/unpack.sh
+$MIDDLEWARE/oracle_common/common/bin/wlst.sh
+
+
+
+Parameters in the JVM Process (ps -ef | grep Java)
+-Dwls.home=/***/***/***/Middleware/wlserver/server 
+-Dweblogic.home=/***/***/***/Middleware/wlserver/server 
+-Dweblogic.Name=AdminServer
+
+
+
+
+
+DOMAIN_HOME: Top-level directory in which domain specific directories are present.
+-> We can have multiple Domain Homes under 1 Middleware
+  
+
+$DOMAIN_HOME/bin -> It contains below files like -> 			
+./startWeblogic.sh & (to start the weblogic)  [ & -> It means to run the proceess in background]
+-> This file during startup/invoke call the ./setUserOverrides.sh (if exists) and then it will call ./setDomainEnv.sh
+
+
+./stopWeblogic.sh  
+./startNodeManager.sh & 
+./stopNodeManager.sh
+
+./setStartupEnv.sh 		-> It contains all the weblogic related startup paramters.
+./setWLSEnv.sh 			-> It sets the following variable: WL_HOME, JAVA_HOME etc.
+./setDomainEnv.sh		-> It invokes the following varibale: WL_HOME, JAVA_HOME, and we can also set the required Arguments like MEM_ARGS (memory arguments) [-Xms4096m -Xmx4096m]
+
+e.g.  
+JAVA_OPTIONS="-Xms4096m -Xmx4096m ${JAVA_OPTIONS}"
+export JAVA_OPTIONS
+
+
+./setUserOverrides.sh  ->  This is an extra which we can create to set the required Arguments like MEM_ARGS (memory arguments) [-Xms4096m -Xmx4096m], in case we dont want to edit ./setDomainEnv.sh file. [Best Practice reffered by Oracle]
+
+
+
+$DOMAIN_HOME/servers 		-> It contains servers directory (Admin and Managed Servers)
+
+$DOMAIN_HOME/nodemanager	
+
+-> NodeManager is Just a Java Process. using this you can start/stop the MS from console.
+-> It contains "nodemanager.properties" file - it contains all paramters for nodemanager configuration (paramters like Java_Home, NodeManger_Home, nodemanager_logs location, NodeManager Listen Port (5556 -> default port)). [It also contains Secure_Listener=true(SSL should be used)/false(SSL should Not be used)]
+
+what are .lck files -> These are lock files. (lock files are created for all JVMs)
+
+when you first time start the ./startNodeManager.sh -> It will start the NodeManager, and will create "nodemanager.process.lck"  file. (this process is kind of lock and you cannot run another same process, you have to first stop it and then only you can start.)
+
+
+$DOMAIN_HOME/config
+-> config.xml file -> It contains all configurations of the entire Domain (like your Domain Name, Admin Server Name, Non-SSL Port Number, SSL Port Number)
+-> jdbc folder (all the jdbc configuration xml files)
+
+
+Can we start MS/JVMs from backend?? - Yes we can start it and it is called "Managed Server Indepenedence Mode (MSI)"
+(For this NodeManger Start is NOT required)
+$DOMAIN_HOME/bin
+./startManagedWeblogic.sh <managed_server_name> &
+./startManagedWeblogic.sh new_Managed_server_1 &
+
+Before Running above command you should create boot.properties in $DOMAIN_HOME/servers/ManagedServers/security and define the username and password
+
+
 
 
 Deployment:
 ==============
 
-Through winscp you can copy the Deployment files on the linux server.
+[[Note: Through winscp you can copy the Deployment files on the linux server.]]
 
-Default Deployment Path: Domain_Home/servers/Admin_Server/upload/
+Default Deployment Path: $Domain_Home/servers/Admin_Server/upload/
 
 Deployment File Types:
 1. WAR File: Web archive  (Application Code Bundled together) --Install this deployment as application
@@ -146,14 +399,14 @@ b. Or Choose the files by giving the Server Path, here deployments will be alrea
 
 
 Security Realm: 
-==============
+=================
 Click on the "Security Ream" > Goto "myrealm" > Goto "Users & Groups" Section to manange
 
 Inside this We Manage required Users & groups, roles & policies respective to the weblogic and required application
 
-Groups: Admin, Deployer, Monitor, Operator Group  [We can also create some kind of manual groups as well]
+Groups: Admin [Full Access], Deployer [only Deployment], Monitor [only monitoring from weblogic console], Operator Group  [We can also create some kind of manual groups as well]
 
-Users: we can associate different users to the above mentioned groups
+Users: we can create the users and associate different users to the above mentioned groups.
 
 Providers: Default Authenticator [It basically deals with the local weblogic authentication page], OID/LDAP Authenticator [It basically deals with OAM authentication page]
 
@@ -170,7 +423,7 @@ For Resetting the password and assiging the required group:
 Click on the UserName -> Goto Password Section and type the new password and click ok
 
 
-Extra Points on Security Realm: 
+Extra Points on Security Realm: (leave for now)
 - Its the security realm that authenticates users and determines which resources they can access.
 - when you create a domain, the username/password credentials you provide are used by the configuration wizard[window launch during installation] to seed the security realm. The Username you provide will be initial administrative user in "myrealm"
 
@@ -178,9 +431,55 @@ Extra Points on Security Realm:
 
 
 
+JDBC(Java Database Configuration):
+===================================
+
+Expand Services -> Click on Data Sources ->
+1. Monitor the DataSources
+2. Create new DataSources
+
+To create a DataSource -> Login to weblogic console -> Goto DataSouce -> Click on New DS & select (Generic/GridLink) -> Specify Name/JNDI_Name/Database Name as Oracle, then we have to specify Database Server Name, DB Port and Service ID, DB Username and password.
+	
+
+JDBC 			-> Java API(Application Programming Interface) Used to access the DB.
+
+DataSource		-> Is simply a place where information/application data is being stored. We have to create the DS in order to connect with the Database. we can monitor the DataSource from the weblogic console.
+
+Connection Pool	-> Its a part of DataSource. Its basically a pool of the number of DB coonections from the APP Server. It determines how many connections can be made from the application to the Database. [Minimum capacity and Maximum capacity]
+
+JNDI (Java Naming and Directory Interface)			-> Its again the JAVA API used to connect with the Database 
+
+DataSource Tyes:
+1. Generic DS 	-> Generic DS is like Single Node DB.
+2. GridLink DS 	-> Oracle Database with RAC (Real Time Application Cluster)
+3. Multi DS 	-> Not remember
+
+$DOMAIN_HOME/config/jdbc -> It contains the XML Files of all the DataSouce created from Console.
 
 
 
+Note: Have you ever found any issue with the DataSouce like connection pool is full or DB connection is Not working...??
+Answer: Yes, we have seen some of the issues with the Datasource like the Database got restarted so we have to restart our JVM/MS as well, we can see the issue has been resolved.
+
+
+
+
+JMS(Java Messaging Server):
+===========================
+I have Not worked on JMS But I have a knowledge about it.
+
+-> It Enables applications to communicate with eachother using messages.
+
+Click on Services -> Messaging -> You can monitor JMS Servers.
+
+
+
+
+
+Performance Tuning:
+===================
+1. Using ./setDomainEnv.sh File.
+2. From Weblogic Console as well.
 
 
 
@@ -188,33 +487,150 @@ Change Center
 ===============
 
 Lock & Edit Option:
-Release Configuration: If we dont want to proceed with the changes, then we can just click on this.
-Activate Changes: Once I have activated the changes, all changes will be reflected and Lock & Edit will be available again
+Release Configuration: 		If we dont want to proceed with the changes, then we can just click on this.
+Activate Changes: 			Once I have activated the changes, all changes will be reflected and Lock & Edit will be available again
+View Changes and Restart: 	
 
 
 
 
 
 
-Installation & Upgrade
-======================
+Installation & Upgrade:
+=======================
 
-Installation Mode:
+Pre-requitse:
+1. Java should be installed. and should be exported
+2. Required memory should be there.  (free -gh)
+3. Required libraries should be there. (when we will launch the installer, it it fails to launch then the reason might be it is NOT able to find the required lib,memory and we can check in the logs [This log location will be in /tmp/***.log] what is the exact issue.)
 
-Dev & Prod
+
+Installation:
+
+1. java -jar <weblogic_12.2.1.3_binary.jar>
+2. Provide the Oracle_Home/Middleware_Home location and Install the 12.2.1.3 Binary
+3. Run the ./config.sh file from $MIDDLEWARE_HOME/oracle_common/common/bin/
+4. Provide the DOMAIN_HOME location
+5. Now, create Admin (speicy Admin Name, Port Numnber, username/password), NodeManager (username and password), Machines (IP Address of the Unix machines), MANAGED_SERVER/JVMs (ManagedServers ports), Clusters
+
+
+Upgrade:
+
+1. java -jar <weblogic_12.2.1.4_binary.jar>
+2. Provide the NEW Oracle_Home/Middleware_Home location and Install the 12.2.1.4 Binary
+3. Run the ./reconfig.sh file from $MIDDLEWARE_HOME/oracle_common/common/bin/
+4. Provide the Existing DOMAIN_HOME location that you want to upgrade from 12.2.1.3 to 12.2.1.4
+5. Now, Just validate all the respective settings like Admin Server, NodeManager, Machine Name, Clusters etc. 
+6. Finish your configuration.
 
 
 
 
-Weblogic Services
-==================
-ps -ef | grep Java
--xms and -xmx
-heap dump and thread dump
-Node URLs, contect roots
-WLST
+Patching the Oracle Weblogic Server:
+====================================
+Patching: To keep our systems up to date. and to keep our systems away from any kind of security threats. [Generally Patching happens on a quarterly basis.]
+$MIDDLEWARE/OPatch/opatch  -> It is used for weblogic patching
 
-- On the MS/JVMs, only the Java byte code can execute
+opatch lspatches 	-> It will list the patches in our system.
+opatch lsinventory 	-> It will also list the patches but in detailed manner.
+
+
+How you apply the Patches on Oracle Weblogic Server:
+
+we download the Oracle Stack Bundle Patches(SPB Patches) from Oracle support and apply on our environment. (DEV-> SIT-> UAT -> PROD)
+1. Shutdown the ENV and Take Backup of Middleware and Domain_Home
+2. Unzip the Patches in Patch Directory (like /tmp/Patches).
+3. Every Patch contains README.txt file for the instructions how we need to apply.
+4. Go To Patch Directory /tmp/Patches & Apply the Patches by running below command:
+
+./spbat.sh -phase precheck -oracle_home  <Middleware_Home>   : It will cross-check any errors before applying the patches.
+./spbat.sh -phase apply -oracle_home  <Middleware_Home>   : It apply the patch.
+
+opatch lspatches -> You can validate whether patch is applied succesfully or NOT.
+
+sometimes we also apply the single pathes using Opatch utility by running below command: 
+opatch apply
+
+Once all patches are applied, you can start the ENV.
+
+
+
+
+
+Weblogic Server State and Thread Types:
+=======================================
+
+Weblogic Server "Threads"
+1. ACTIVE:  Eligible threads to process incoming request.
+2. STANDBY: wating threads to be marked eligible to process incoming request.
+3. STUCK:   When the thread is stuck waiting on a request/resource more than the configured STUCK_THREAD_MAX_TIME
+4. HOGGER: an execute thread held by request right now. will be declared as STUCK after configured STUCK_THREAD_MAX_TIME.
+
+
+Weblogic Server "Health"
+1. OK
+2. WARNING -> a) Click on that MS Server -> Goto the Monitoring Tab -> Go to the Threads section (and check for the Stuck threads and Take thread dumps)
+			  b) Click on that MS Server -> Goto the Monitoring Tab -> Go to the Performance section (and perform Garbage collection, it will free up the required heap memory and sometimes memory gets full and leads the MS into warning state.)
+			  
+
+Weblogic Server "State"
+1. RUNNING
+2. FAILED
+3. Admin
+4. SHUTDOWN
+5. FORCE_NOT_RESTARTABLE
+
+Server going into FAILED State -> Because of multiple reasons:
+1. Mount point got filled. (df -h, du -sh *) -> Solution: zip the larger files or log files which are NOT in use. (gzip <log_file_name>.log)
+2. May be some of the files got corrupted, need to check the same.
+3. Node manager is NOT Running. 
+
+
+
+How to take thread Dump:
+
+Thread DUMP: A thread dump is a snapshot of the state of all the threads of a Java process.
+Option 1 -> From Weblogic Console -> Click on that MS Server -> Goto the Monitoring Tab -> Go to the Threads section and take thread dump.
+Option 2 -> ./jstack Process_ID > /tmp/thread_dump_date.txt
+
+How to take Heap Dump:
+
+Heap Dump: A heap dump is a snapshot of all the objects in the Java Virtual Machine (JVM) heap at a certain point in time.
+./jmap Process_ID > /tmp/heapdump_date.txt
+
+heap.hprof -> format/file_name of heap_dump
+
+
+
+
+
+Logging on Weblogic:
+=====================
+Default Logs location: $DOMAIN_HOME/servers/<MS_server_name>/logs/
+
+LOG File -> It contains all the information realted to server and application activity. It contains the ERRORs, WARNING, INFO etc etc.
+
+tail -100f MS_server_name.log
+tail -100f MS_server_name.out  > It also contains the application realted logs
+vi MS_server_name.out
+
+
+If you want to change the location of the log file, you can do it from the console -> Goto Console > Click on any Server > Goto Logging Tab ->Change the Path.
+
+
+
+
+
+Domain Mode:
+=============
+
+Development Mode: (No Change Center i.e. all changes will be effected immediately)
+Production Mode: (Change center i.e. first you have to lock & edit, then only you can do the changes)
+
+
+
+
+
 
 
 
@@ -241,5 +657,17 @@ Questions Set
 1. If you are CE then why you are in IT or pursing carrer in IT etc???
 2. DR Servers
 3. diffence between 12.2.1.3 and 12.2.1.4 and 14.1.1.0... have you worked on 11g versions?
+4. stage and non-stage mode in weblogic?
+5. what is CVE?
+6. what is CLASS_PATH?
+
+
+heap dump and thread dump
+Node URLs, context roots
+WLST
+
+how to find weblogic versions?
+
+- On the MS/JVMs, only the Java byte code can execute
 
 
