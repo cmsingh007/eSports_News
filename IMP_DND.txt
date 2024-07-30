@@ -14,6 +14,7 @@ Questions Set
 
 
 
+
 Basic Idea/Terminlogies
 +++++++++++++++++++++++++++++++++
 
@@ -65,8 +66,8 @@ my full name is sanchit chaudhary and I basically belong to Bulandshahr city in 
 
 I have over 2.5 years hand on exp. in Administration and Maintenance on Oracle Fusion Middleware servers. I am currently working as Oracle Weblogic Administrator in IT services of BRO under EDP Section. The technology Stack that I have worked on include- Oracle Weblogic Server, Oracle HTTP Server, SSL Certificates and working knowledge on apache & tomcat. I am also learning Container Services like Docker & Kubernetes.
 
-I have succesfully installed Oracle Weblogic Server 12.2.1.3 and Oracle HTTP Server 12.2.1.3 & have also upgrade the weblogic and OHS infrastructure to 12.2.1.4.
-My Day 2 Day Task include-below activities:
+I have succesfully installed Oracle Weblogic Server 12.2.1.3 and have also upgrade the weblogic to 12.2.1.4.
+My Day 2 Day Tasks include activities like:
 
 
 Your Day to Day tasks/Weblogic Admin Tasks
@@ -76,6 +77,8 @@ Your Day to Day tasks/Weblogic Admin Tasks
 3. Monitoring & Analyzing resources from weblogic console, logs.
 4. communication with respective application teams for issues and resolution.
 5. Patching the Environment.
+
+Thats all about me Sir!
 
 
 
@@ -93,6 +96,7 @@ recent Issue that you have worked on:
 1. NodeManager Issue.
 
 
+
 Answer to HR or anyone regarding your position
 ===============================================
 
@@ -103,6 +107,8 @@ The Main Reason for my switch is:
 
 Same tech stack we have in corporate world, so I thought why NOT to switch to corporate as it will save me from 12000ft high-altitude region.
 
+Honestly sir, I am looking for a change and I want to stay for a longer period.
+
 
 
 
@@ -110,6 +116,11 @@ Same tech stack we have in corporate world, so I thought why NOT to switch to co
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Oracle Weblogic Server + Issues + Important Files & Locations:
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+Oracle Weblogic version check:
+1. If your console is Running: on the page itself you can see the version.
+2. from backend, in config.xml -> you can find the version.
 
 
 Linux Important Info & Commands:
@@ -332,7 +343,7 @@ when you first time start the ./startNodeManager.sh -> It will start the NodeMan
 
 
 $DOMAIN_HOME/config
--> config.xml file -> It contains all configurations of the entire Domain (like your Domain Name, Admin Server Name, Non-SSL Port Number, SSL Port Number)
+-> config.xml file -> (Its like the DNA of Complete Domain)It contains all configurations of the entire Domain (like your Domain Name, Admin Server Name, Non-SSL Port Number, SSL Port Number)
 -> jdbc folder (all the jdbc configuration xml files)
 
 
@@ -475,8 +486,12 @@ Click on Services -> Messaging -> You can monitor JMS Servers.
 
 Performance Tuning:
 ===================
-1. Using ./setDomainEnv.sh File.
-2. From Weblogic Console as well.
+1. GC -> You can perform GC from console.
+2. Tuning of the Heap Memory of JVM.
+   a) Using ./setDomainEnv.sh File. -> specify memory -Xms4096m -Xmx4096m
+   b) From Weblogic Console as well. -> Click on MS -> Configuration -> ServerStart -> In Argumnets Tab -> You can specify specify memory -Xms4096m -Xmx4096m
+3. You can take thread dumps and share with the application team for anaylsis. [We dont do the Analysis]
+
 
 
 
@@ -616,6 +631,17 @@ If you want to change the location of the log file, you can do it from the conso
 
 
 
+.out -> will print all logs related to your java application deployed whereas 
+.log -> file will print all logs related to weblogic server like startup, stop,deployment etc....
+
+
+Log File Parameters:
+INFO: Its Just prints the information about server and application activity.
+DEBUG: DEBUG is debugging of the application code and its like extra layer of Information about application.
+ERROR and WARNING: This are the parameters we generally check in logs, whether there are any ERRORs related to application or server
+
+
+
 
 
 Domain Mode:
@@ -671,9 +697,12 @@ unpack on secondary node
 Oracle HTTP Server(OHS) + Issues + Important Files & Locations:
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-OHS is Web Server.
+OHS Version Check:
+$OHS_HOME/oui/bin -> ./viewInventory.sh -> Inside this file version is mentioned.
 
-Important File in OHS:
+[I have installed OHS for my learning perspective and moreover the installation process is same like Oracle weblogic server, like we install OHS binares in OHS_HOME and using ./config.sh we create an OHS_DOMAIN]
+
+OHS is a Web Server and its includes many important files like (mod_wl_ohs.conf, ssl.conf, httpd.conf)
 
 1. mod_wl_ohs.conf
 - This file is used to connect with the APP server like weblogic.
@@ -713,7 +742,17 @@ include "ssl.conf"
 include "admin.conf"
 
 
+what is a component in OHS? -> when we create the domain, we create a component as well. Basically the OHS component is kind of SERVICE which makes OHS UP and Down.
 
+How do you start the OHS?
+$OHS_DOMAIN/OHS_Component/bin
+
+./startNodeManager &
+./startComponent OHS_Component (If required specify username/password)
+
+Stop the OHS
+./stopComponent OHS_Component
+./stopNodeManager
 
 
 
@@ -721,9 +760,14 @@ include "admin.conf"
 SSL Certificates + Issues:
 ++++++++++++++++++++++++++
 
+what activities you do from SSL Perspective:
+We Renew the required SSL Certificate in our environment in required keystores (trust and identity). Generally SSL Certificates are valid for 1 Year and we have receive the SSL Certificate in Chain format from the center.  [We are receiving certificates from another-team.]
+
+Create a Path like /home/sanchitchaudhary/SSL_Keystores and this path will have the keystores and we can map these keystores on the weblogic console.
+
 SSL -> Secure Socket Layer.
-Keystore -> It contains the Private Key files and SSL Certificates. (e.g. of keystores -> trust.pkx and identity.pkx)
-and we can map these keystores on the weblogic console.
+Keystore -> Basically theses are files. It contains the Private Key files and SSL Certificates. (e.g. of keystores -> trust.pkx and identity.pkx)
+
 
 SSL is basically used for encryption connection between client and server.
 
@@ -731,11 +775,11 @@ we only have SSL on Weblogic Not on OHS server & Using "keytool" utility we impo
 
  
 keytool -delete       [It will delete the existing SSL Certificate from Keystore]
-Keytool -importcert   [It will add the new SSL Certificate in Keystore.]
+Keytool -importcert   [It will add the new SSL Certificate in Keystore that you have received in chain format]
  
 
 
-
+=========================================================
 openssl pkcs12 -in <Certificate_Name>.pfx -out <Certificate_Name>.pem
 openssl pkcs12 -in <Certificate_Name>.pfx -nocerts -out priv-key1.key -nodes
 keytool -delete -alias workday -keystore trust.pkx -storepass *****@_store
@@ -760,6 +804,9 @@ Below are the 3 critical apps that we were supporting:
 
 First 3 Environment is for testing purpose only
 Prod Environment -> LIVE Environment.
+
+
+
 
 
 
