@@ -1,0 +1,77 @@
+
+
+what is plx file -- A PLX file is a program compiled from one or more scripts written in Perl high level programming language
+
+
+Password change in RMB:
+Initialize the environment -> by running $SPL_HOME/bin/initialsetup.sh , 
+and then run the -> $SPL_HOME/bin/configureEnv.sh file and you can reset the password for CISADM or sysuser
+
+
+What is a Threadpool Worker?  -- A thread pool is a collection of worker threads that efficiently execute asynchronous callbacks on behalf of the application.
+
+
+Thread vs Threadpool worker??
+
+ 
+What is configureEnv.sh?  - Main core file of ORMB  - contains App and DB server details
+
+ 
+What is initialsetup.sh?- To reflect all the changes in RMB, we generally Run the initialsetup
+
+
+ 
+What is Gather Stats? - Oracle Optimizer determines the cost of each execution plan based on database, schema, table and other statistics.
+
+ 
+
+What is a Batch Control? - ORMB Batch provides reusable functions that are essential in processing large volumes of records, including logging/tracing, transaction management, job processing statistics, job restart, skip, and resource management
+
+ 
+If the Batch is pending in RMB, then what are the possible causes of it?
+we will check for the threadpool logs...
+
+In sql developer -> monitor the session -> check the sql_id -> it will contain contains the module_name & seconds in wait time  -> get the sql code from the sql_id and share with the DB team
+check the time i.e cost by running the analyzer
+
+-> also will check for awr(automatic worload repo) report
+
+ 
+How can you change log level from error to debug? -> From weblogic console
+
+ 
+What is F1-FLUSH? - flush all caches, this process will flush the application data cached for all threadpool workers.
+we can run it from the Batch Job submission and specify the Batch Job code as F1-FLUSH
+
+ 
+User is not able to login in ORMB. What can be the cause of it?
+required users groups are NOT assigned..
+
+ 
+How can you make permanent changes in spl configuration? - through cm_templates in $SPL_HOME/templates
+
+
+RMB Rollup Patches vs Single Fix....how you can prepare the Rollup patches files to consolidate all the SF patches...
+
+SF -> ./installSF.sh
+Rollup -> ./install.sh
+
+what is Environment Refresh - Steps from DB and Application Side?
+
+what is Zero-Day Vulnerability? -> The Vulnerability has been already exploited and the vendor has zero days to prepare tha patch for the Products
+
+
+cat /etc/cistab -> It will give us the Number of Environments installed on the system/server
+
+$SPL_HOME/etc/conf/tpw/threadpoolworker.properties - some of the JVM options and custom parameters
+
+$SPL_HOME/splapp/standalone/config/spl.properties - required runtime paramters and timeout parameters
+
+$SPL_HOME/etc/ENVINON.INI file > system modified file..contains complete environment configuration details like DB host, port, user, connection string, environment KS file, SPL details, some of the app server details
+
+$SPL_HOME/updates/installed_fixes.txt   file -> give you the Patches and fixes installed in the RMB ENV
+
+How can you find out how many threads are running in one Threadpool Worker?  -> ThreadPool.GetAvailableThreads
+
+CI_INSTALL_PROD -> This table in DB will give you the versions of RMB
+
